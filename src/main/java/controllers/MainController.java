@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class MainController {
 
     @FXML
-    private ListView<Entity> myListView = new ListView<Entity>();
+    private ListView<Entity> myListView = new ListView<>();
 
     @FXML
     private TextArea myTextArea;
@@ -39,7 +39,7 @@ public class MainController {
     private AnchorPane anchorPane;
 
     private ObservableList<Entity> obList = FXCollections
-            .observableArrayList(new ArrayList<Entity>());
+            .observableArrayList(new ArrayList<>());
 
 
     @FXML
@@ -123,7 +123,7 @@ public class MainController {
      */
     public void doBolt(ActionEvent actionEvent) {
         String selectedText = (myTextArea.getSelectedText());
-        if (selectedText.length() > 0) {
+        //if (selectedText.length() > 0) {
 
             /*myTextArea.setStyle(
                     ".text-area *.text { \n" +
@@ -131,6 +131,20 @@ public class MainController {
                     "    -fx-highlight-text-fill: #d60e0e; \n" +
                     "    -fx-text-alignment: center}"
             );*/
+        //}
+    }
+
+    /**
+     * Save current entity.
+     * @param actionEvent action event
+     */
+    public void save(ActionEvent actionEvent) {
+        Entity currentEntity = myListView.getFocusModel().getFocusedItem();
+
+        if (currentEntity != null) {
+            EntityTool tool = new EntityTool();
+
+            tool.saveEntityXML(currentEntity);
         }
     }
 }
