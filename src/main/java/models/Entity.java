@@ -1,12 +1,10 @@
 package models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Objects;
 
 @Data
-@AllArgsConstructor
 public class Entity {
     private String name;
     private String value;
@@ -18,6 +16,15 @@ public class Entity {
     public Entity(final String name) {
         this.name = name;
         this.value = "";
+    }
+
+    /**
+     * Constructor with two param.
+     * @param name Name
+     */
+    public Entity(final String name, final String value) {
+        this.name = name;
+        this.value = value;
     }
 
     public String getValue() {

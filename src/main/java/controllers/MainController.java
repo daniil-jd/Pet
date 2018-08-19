@@ -62,11 +62,20 @@ public class MainController {
         initEditStage();
     }
 
+    /**
+     * Init start data.
+     */
     private void initStartData() {
-        obList.add(new Entity("entity " + (myListView.getItems().size() + 1)));
+        Entity info = new Entity("info",
+                "Здесь будет информация о приложении...");
+        obList.add(info);
+        obList.add(new Entity("Новая запись..."));
         myListView.setItems(obList);
     }
 
+    /**
+     * Init listeners.
+     */
     private void initListeners() {
         myListView.getSelectionModel().getSelectedItems()
                 .addListener(new ListChangeListener<Entity>() {
@@ -128,6 +137,9 @@ public class MainController {
         });
     }
 
+    /**
+     * Init edit stage.
+     */
     private void initEditStage() {
         try {
             fxmlLoader  = new FXMLLoader();
@@ -143,39 +155,8 @@ public class MainController {
      * @param actionEvent actionEvent
      */
     public void addSomeValues(ActionEvent actionEvent) {
-        obList.add(new Entity("entity " + (myListView.getItems().size() + 1)));
+        obList.add(new Entity("Новая запись (" + (myListView.getItems().size()) + ")"));
         myListView.setItems(obList);
-    }
-
-    /**
-     * Get text bolt.
-     * @param actionEvent actionEvent
-     */
-    public void doBolt(ActionEvent actionEvent) {
-        String selectedText = (myTextArea.getSelectedText());
-        //if (selectedText.length() > 0) {
-
-            /*myTextArea.setStyle(
-                    ".text-area *.text { \n" +
-                    "    -fx-text-fill: #1e88e5; \n" +
-                    "    -fx-highlight-text-fill: #d60e0e; \n" +
-                    "    -fx-text-alignment: center}"
-            );*/
-        //}
-    }
-
-    /**
-     * Save current entity.
-     * @param actionEvent action event
-     */
-    public void save(ActionEvent actionEvent) {
-        Entity currentEntity = myListView.getFocusModel().getFocusedItem();
-
-        if (currentEntity != null) {
-            EntityTool tool = new EntityTool();
-
-            tool.saveEntityXML(currentEntity);
-        }
     }
 
     /**
@@ -191,6 +172,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Show edit dialog.
+     * @param currentEntity Entity
+     */
     private void showEditDialog(Entity currentEntity) {
         if (renameListViewStage == null) {
             renameListViewStage = new Stage();
@@ -206,5 +191,45 @@ public class MainController {
         editController.setEntity(currentEntity);
         renameListViewStage.showAndWait();
         myListView.refresh();
+    }
+
+    /**
+     * Rename entity from menu bar.
+     * @param actionEvent action event
+     */
+    public void renameFromMenuBar(ActionEvent actionEvent) {
+        Entity currentEntity = myListView.getFocusModel().getFocusedItem();
+        if (currentEntity != null) {
+            showEditDialog(currentEntity);
+        }
+    }
+
+    /**
+     * Save entity from menu bar.
+     * @param actionEvent action event
+     */
+    public void saveFromMenuBar(ActionEvent actionEvent) {
+        Entity currentEntity = myListView.getFocusModel().getFocusedItem();
+
+        if (currentEntity != null) {
+            EntityTool tool = new EntityTool();
+
+            tool.saveEntityXML(currentEntity);
+        }
+    }
+
+    /**
+     * Delete entity from menu bar.
+     * @param actionEvent
+     */
+    public void deleteFromMenuBar(ActionEvent actionEvent) {
+        Entity currentEntity = myListView.getFocusModel().getFocusedItem();
+
+        if (myListView.getItems().size() > 2
+                && currentEntity != null) {
+            ObservableList<Entity> entities = myListView.getItems();
+            entities.remove(currentEntity);
+            myListView.setItems(entities);
+        }
     }
 }
