@@ -24,6 +24,7 @@
                               <items>
                                 <MenuItem fx:id="renameMenuBar" mnemonicParsing="false" onAction="#renameFromMenuBar" text="Rename" />
                                     <MenuItem fx:id="saveMenuBar" mnemonicParsing="false" onAction="#saveFromMenuBar" text="Save" />
+                                    <MenuItem fx:id="loadMenuBar" mnemonicParsing="false" onAction="#loadFromMenuBar" text="Load" />
                                     <MenuItem fx:id="deleteMenuBar" mnemonicParsing="false" onAction="#deleteFromMenuBar" text="Delete" />
                               </items>
                             </Menu>

@@ -17,12 +17,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Entity;
 import tools.EntityTool;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -212,9 +214,8 @@ public class MainController {
         Entity currentEntity = myListView.getFocusModel().getFocusedItem();
 
         if (currentEntity != null) {
-            EntityTool tool = new EntityTool();
-
-            tool.saveEntityXML(currentEntity);
+            EntityTool saveTool = new EntityTool(false);
+            saveTool.saveEntityXML(currentEntity);
         }
     }
 
@@ -230,6 +231,24 @@ public class MainController {
             ObservableList<Entity> entities = myListView.getItems();
             entities.remove(currentEntity);
             myListView.setItems(entities);
+        }
+    }
+
+    /**
+     * Load entity from disk.
+     * @param actionEvent actionEvent
+     */
+    public void loadFromMenuBar(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+        File file = fileChooser.showOpenDialog(myListView.getScene().getWindow());
+        if (file != null) {
+            EntityTool readTool = new EntityTool(true);
+            Entity entityFromDisk = readTool.readEntityXML(file);
+
+            ObservableList<Entity> entities = myListView.getItems();
+            entities.add(entityFromDisk);
+            myListView.setItems(entities);
+            myListView.refresh();
         }
     }
 }

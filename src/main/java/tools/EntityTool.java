@@ -7,10 +7,16 @@ import org.w3c.dom.Element;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.*;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class EntityTool {
 
@@ -25,8 +31,23 @@ public class EntityTool {
     private TransformerFactory transformerFactory;
     private Transformer transformer;
 
-    public EntityTool() {
+    private XMLInputFactory xmlInputFactory;
 
+    public EntityTool(boolean isRead) {
+        if (isRead) {
+            initReader();
+        }
+        else {
+            initSaver();
+        }
+
+    }
+
+    private void initReader() {
+        xmlInputFactory = XMLInputFactory.newInstance();
+    }
+
+    private void initSaver() {
         try {
             factory = DocumentBuilderFactory.newInstance();
             builder = factory.newDocumentBuilder();
@@ -70,5 +91,40 @@ public class EntityTool {
             return false;
         }
         return true;
+    }
+
+    public Entity readEntityXML (File file) {
+        try {
+            XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(file));
+            Entity entity = null;
+            int count = -1;
+            while(xmlEventReader.hasNext()) {
+                XMLEvent xmlEvent = xmlEventReader.nextEvent();
+                if (xmlEvent.isStartElement()) {
+                    StartElement startElement = xmlEvent.asStartElement();
+                    if (startElement.getName().getLocalPart().equals("name")) {
+                        count = 0;
+                    } else if (startElement.getName().getLocalPart().equals("text")) {
+                        count = 1;
+                    }
+                }
+                if (xmlEvent.isCharacters()) {
+                    Characters chrctrs = xmlEvent.asCharacters();
+                    if (count == 0) {
+                        entity = new Entity(chrctrs.getData());
+                        count = -1;
+                    } else if (count == 1) {
+                        entity.setValue(chrctrs.getData());
+                        count = -1;
+                    }
+                }
+            }
+            return entity;
+        } catch (XMLStreamException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
