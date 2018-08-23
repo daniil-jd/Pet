@@ -59,9 +59,14 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        loadEntities();
         initStartData();
         initListeners();
         initEditStage();
+    }
+
+    private void loadEntities() {
+        obList.addAll(new EntityTool(true).loadEntities());
     }
 
     /**
