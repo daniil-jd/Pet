@@ -17,6 +17,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.*;
 
 public class EntityTool {
 
@@ -126,5 +127,19 @@ public class EntityTool {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public List<Entity> loadEntities() {
+        PropertyTool propertyTool = new PropertyTool();
+        Set<Map.Entry<Object, Object>> map = propertyTool.getAllProperties();
+        Iterator<Map.Entry<Object, Object>> it = map.iterator();
+
+        List<Entity> result = new ArrayList<>();
+        while (it.hasNext()) {
+            Entity entity = readEntityXML(new File(it.next().getValue().toString()));
+            result.add(entity);
+        }
+
+        return result;
     }
 }
