@@ -133,7 +133,7 @@ public class MainController {
                                 @Override
                                 public void handle(WindowEvent event) {
                                     for (Entity entity : myListView.getItems()) {
-                                        EntityTool.saveEntity(entity);
+//                                        EntityTool.saveEntity(entity);
                                     }
                                 }
                             });
@@ -246,7 +246,7 @@ public class MainController {
     public void loadFromMenuBar(ActionEvent actionEvent) {
         FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(myListView.getScene().getWindow());
-        if (file != null) {
+        if (file != null && file.length() > 0) {
             EntityTool readTool = new EntityTool(true);
             Entity entityFromDisk = readTool.readEntityXML(file);
 

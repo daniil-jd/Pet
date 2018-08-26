@@ -11,13 +11,11 @@ public class MainRunner extends Application {
     public void start(Stage primaryStage) throws Exception {
         //FXMLLoader loader = new FXMLLoader();
 
-        Parent root = FXMLLoader.load(getClass().getResource("/views/Main.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/views/Login.fxml"));
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        /*FXMLLoader.load(getClass().getResource("/views/Main.fxml"));
-        MainController controller = (MainController) (FXMLLoader.load(getClass().getResource("/views/Main.fxml")));
-        controller.setPrimaryStage(primaryStage);*/
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 }

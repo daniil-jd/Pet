@@ -1,5 +1,7 @@
 package tools;
 
+import models.Entity;
+
 import java.io.*;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,8 +36,6 @@ public class PropertyTool {
         try {
             inputStream = new FileInputStream("config.properties");
             properties.load(inputStream);
-
-            outputStream = new FileOutputStream("config.properties");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -49,6 +49,15 @@ public class PropertyTool {
                 }
             }
         }
+    }
+
+    /**
+     * Checks that file exist.
+     * @return true if exist
+     */
+    public boolean isFileExist() {
+        File file = new File("config.properties");
+        return file.exists();
     }
 
     /**
@@ -71,7 +80,28 @@ public class PropertyTool {
      * @return property value
      */
     public String getProperty(String name) {
-        return properties.getProperty(name);
+        String res = properties.getProperty(name);
+        if (res == null) {
+            return "";
+        }
+        return res;
+    }
+
+    /**
+     * Check that file exist property.
+     * @param name property name
+     * @return true if exist
+     */
+    public boolean isPropertyExist(String name) {
+        try {
+            if (properties.getProperty(name) != null
+                    && properties.getProperty(name).length() > 0) {
+                return true;
+            }
+        } catch (NullPointerException e) {
+            return false;
+        }
+        return false;
     }
 
     /**
@@ -79,6 +109,19 @@ public class PropertyTool {
      * @param propMap new properties map
      */
     public void saveProperties(Map<String,String> propMap) {
+        try {
+            outputStream = new FileOutputStream("config.properties");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        Set<Map.Entry<Object, Object>> set = properties.entrySet();
+        Iterator<Map.Entry<Object, Object>> it = set.iterator();
+        while (it.hasNext()) {
+            Map.Entry<Object, Object> en = it.next();
+            String key = en.getKey().toString();
+            String value = en.getValue().toString();
+            propMap.put(key, value);
+        }
         Iterator<Map.Entry<String, String>> iterator = propMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, String> entry = iterator.next();
@@ -98,5 +141,4 @@ public class PropertyTool {
     public Set<Map.Entry<Object, Object>> getAllProperties() {
         return properties.entrySet();
     }
-
 }

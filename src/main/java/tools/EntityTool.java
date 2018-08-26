@@ -95,44 +95,46 @@ public class EntityTool {
     }
 
     public Entity readEntityXML (File file) {
-        try {
-            XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(file));
-            Entity entity = null;
-            int count = -1;
-            while(xmlEventReader.hasNext()) {
-                XMLEvent xmlEvent = xmlEventReader.nextEvent();
-                if (xmlEvent.isStartElement()) {
-                    StartElement startElement = xmlEvent.asStartElement();
-                    if (startElement.getName().getLocalPart().equals("name")) {
-                        count = 0;
-                    } else if (startElement.getName().getLocalPart().equals("text")) {
-                        count = 1;
+        if (file.length() > 0) {
+            try {
+                XMLEventReader xmlEventReader = xmlInputFactory.createXMLEventReader(new FileInputStream(file));
+                Entity entity = null;
+                int count = -1;
+                while (xmlEventReader.hasNext()) {
+                    XMLEvent xmlEvent = xmlEventReader.nextEvent();
+                    if (xmlEvent.isStartElement()) {
+                        StartElement startElement = xmlEvent.asStartElement();
+                        if (startElement.getName().getLocalPart().equals("name")) {
+                            count = 0;
+                        } else if (startElement.getName().getLocalPart().equals("text")) {
+                            count = 1;
+                        }
+                    }
+                    if (xmlEvent.isCharacters()) {
+                        Characters chrctrs = xmlEvent.asCharacters();
+                        if (count == 0) {
+                            entity = new Entity(chrctrs.getData());
+                            count = -1;
+                        } else if (count == 1) {
+                            entity.setValue(chrctrs.getData());
+                            count = -1;
+                        }
                     }
                 }
-                if (xmlEvent.isCharacters()) {
-                    Characters chrctrs = xmlEvent.asCharacters();
-                    if (count == 0) {
-                        entity = new Entity(chrctrs.getData());
-                        count = -1;
-                    } else if (count == 1) {
-                        entity.setValue(chrctrs.getData());
-                        count = -1;
-                    }
-                }
+                return entity;
+            } catch (XMLStreamException e) {
+                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
             }
-            return entity;
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         }
         return null;
     }
 
     public List<Entity> loadEntities() {
         PropertyTool propertyTool = new PropertyTool();
-        Set<Map.Entry<Object, Object>> map = propertyTool.getAllProperties();
-        Iterator<Map.Entry<Object, Object>> it = map.iterator();
+        Set<Map.Entry<Object, Object>> set = propertyTool.getAllProperties();
+        Iterator<Map.Entry<Object, Object>> it = set.iterator();
 
         List<Entity> result = new ArrayList<>();
         while (it.hasNext()) {
