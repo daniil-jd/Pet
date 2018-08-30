@@ -22,11 +22,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import models.Entity;
+import tools.AuthTool;
 import tools.EntityTool;
+import tools.PropertyTool;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainController {
 
@@ -217,10 +221,18 @@ public class MainController {
      */
     public void saveFromMenuBar(ActionEvent actionEvent) {
         Entity currentEntity = myListView.getFocusModel().getFocusedItem();
+        PropertyTool pt = new PropertyTool();
 
         if (currentEntity != null) {
+            Entity encodedEntity = new Entity(currentEntity.getName(),
+                    AuthTool.getEncodedText(currentEntity.getValue()));
             EntityTool saveTool = new EntityTool(false);
-            saveTool.saveEntityXML(currentEntity);
+            saveTool.saveEntityXML(encodedEntity, new PropertyTool().getPath());
+
+            Map<String, String> map = new HashMap<>();
+            map.put(currentEntity.getName(),
+                    pt.getPath() + currentEntity.getName() + ".xml");
+            pt.saveProperties(map);
         }
     }
 

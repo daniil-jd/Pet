@@ -32,6 +32,8 @@ public class LoginController {
 
     private Stage signUpStage;
 
+    private boolean checkPasswordIsExist = false;
+
     @FXML
     private void initialize() {
         initSignUp();
@@ -103,9 +105,12 @@ public class LoginController {
      * @param mouseEvent mouse Event
      */
     public void onMouseMove(MouseEvent mouseEvent) {
-        PropertyTool pt = new PropertyTool();
-        if (!pt.isFileExist() || !pt.isPropertyExist("password")) {
-            showSignUp();
+        if (!checkPasswordIsExist) {
+            PropertyTool pt = new PropertyTool();
+            if (!pt.isFileExist() || !pt.isPropertyExist("password")) {
+                showSignUp();
+            }
+            checkPasswordIsExist = true;
         }
     }
 }
