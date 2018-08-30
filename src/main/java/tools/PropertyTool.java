@@ -29,12 +29,18 @@ public class PropertyTool {
     private OutputStream outputStream;
 
     /**
+     * Path to directory with the .properties and .xml.
+     */
+    private String path = "";
+
+    /**
      * Constructor to initialize property, input and output steams.
      */
     public PropertyTool() {
+        setPath();
         createFileIfNotExist();
         try {
-            inputStream = new FileInputStream("config.properties");
+            inputStream = new FileInputStream(path + "config.properties");
             properties.load(inputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -56,15 +62,30 @@ public class PropertyTool {
      * @return true if exist
      */
     public boolean isFileExist() {
-        File file = new File("config.properties");
+        File file = new File(path + "config.properties");
         return file.exists();
+    }
+
+    /**
+     * Set path.
+     */
+    private void setPath() {
+        File pathFile = new File("data");
+        if (!pathFile.exists()) {
+            pathFile.mkdir();
+        }
+        path = pathFile.getAbsolutePath() + "\\";
+    }
+
+    public String getPath() {
+        return path;
     }
 
     /**
      * Create .properties if not exist.
      */
     private void createFileIfNotExist() {
-        File file = new File("config.properties");
+        File file = new File(path + "config.properties");
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -110,7 +131,7 @@ public class PropertyTool {
      */
     public void saveProperties(Map<String,String> propMap) {
         try {
-            outputStream = new FileOutputStream("config.properties");
+            outputStream = new FileOutputStream(path + "config.properties");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

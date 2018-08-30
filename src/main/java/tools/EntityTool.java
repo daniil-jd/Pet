@@ -69,7 +69,7 @@ public class EntityTool {
         }
     }
 
-    public boolean saveEntityXML(final Entity entity) {
+    public boolean saveEntityXML(final Entity entity, final String path) {
         try {
             Element rootElement = document.createElement("entity");
             document.appendChild(rootElement);
@@ -83,7 +83,7 @@ public class EntityTool {
             rootElement.appendChild(textElement);
 
             DOMSource source = new DOMSource(document);
-            StreamResult result = new StreamResult(new File(entity.getName() + ".xml"));
+            StreamResult result = new StreamResult(new File(path + entity.getName() + ".xml"));
             transformer.transform(source, result);
             /*StreamResult result =  new StreamResult(System.out);
             transformer.transform(source, result);*/
@@ -116,7 +116,8 @@ public class EntityTool {
                             entity = new Entity(chrctrs.getData());
                             count = -1;
                         } else if (count == 1) {
-                            entity.setValue(chrctrs.getData());
+                            entity.setValue(
+                                    AuthTool.getOpenText(chrctrs.getData()));
                             count = -1;
                         }
                     }

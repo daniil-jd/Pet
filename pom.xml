@@ -40,6 +40,15 @@
             <artifactId>spring-core</artifactId>
             <version>4.2.3.RELEASE</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jasypt/jasypt -->
+        <dependency>
+            <groupId>org.jasypt</groupId>
+            <artifactId>jasypt</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+
+
     </dependencies>
 
 </project>
