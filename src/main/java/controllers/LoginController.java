@@ -1,5 +1,7 @@
 package controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import tools.AuthTool;
@@ -15,6 +19,9 @@ import tools.PropertyTool;
 import java.io.IOException;
 
 public class LoginController {
+
+    @FXML
+    private AnchorPane loginPane;
 
     @FXML
     private PasswordField passwordField;
@@ -89,5 +96,16 @@ public class LoginController {
         alert.setHeaderText("Password is incorrect");
         alert.setContentText("Check your pass");
         alert.showAndWait();
+    }
+
+    /**
+     * When mouse moves to Login Pane.
+     * @param mouseEvent mouse Event
+     */
+    public void onMouseMove(MouseEvent mouseEvent) {
+        PropertyTool pt = new PropertyTool();
+        if (!pt.isFileExist() || !pt.isPropertyExist("password")) {
+            showSignUp();
+        }
     }
 }

@@ -138,8 +138,11 @@ public class EntityTool {
 
         List<Entity> result = new ArrayList<>();
         while (it.hasNext()) {
-            Entity entity = readEntityXML(new File(it.next().getValue().toString()));
-            result.add(entity);
+            Map.Entry<Object, Object> item = it.next();
+            if (!item.getKey().toString().equals("password")) {
+                Entity entity = readEntityXML(new File(item.getValue().toString()));
+                result.add(entity);
+            }
         }
 
         return result;
