@@ -128,7 +128,7 @@ public class PropertyTool {
             properties.setProperty(entry.getKey(), entry.getValue());
         }
         try {
-            properties.store(outputStream, null);
+            properties.store(outputStream, "");
         } catch (IOException e) {
             e.printStackTrace();
         }
