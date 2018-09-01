@@ -32,6 +32,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Main controller. Responsible for creating, editing, deleting entities.
+ */
 public class MainController {
 
     @FXML
@@ -46,18 +49,33 @@ public class MainController {
     @FXML
     private TextField myTextField;
 
+    /**
+     * FXML loader.
+     */
     private FXMLLoader fxmlLoader;
 
+    /**
+     * Parent.
+     */
     private Parent fxmlEdit;
 
+    /**
+     * Edit Controller
+     */
     private EditController editController;
 
     @FXML
     private AnchorPane anchorPane;
 
+    /**
+     * Observable List which contains entities.
+     */
     private ObservableList<Entity> obList = FXCollections
             .observableArrayList(new ArrayList<>());
 
+    /**
+     * Rename stage.
+     */
     private Stage renameListViewStage;
 
 
@@ -69,6 +87,9 @@ public class MainController {
         initEditStage();
     }
 
+    /**
+     * Load entities from xml.
+     */
     private void loadEntities() {
         obList.addAll(new EntityTool(true).loadEntities());
     }

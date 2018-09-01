@@ -18,6 +18,9 @@ import tools.PropertyTool;
 
 import java.io.IOException;
 
+/**
+ * Controller for loading the login page.
+ */
 public class LoginController {
 
     @FXML
@@ -26,12 +29,24 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    /**
+     * SignUpController.
+     */
     private SignUpController signUpController;
 
+    /**
+     * Parent.
+     */
     private Parent fxmlParent;
 
+    /**
+     * SignUpStage.
+     */
     private Stage signUpStage;
 
+    /**
+     * Check that password exist.
+     */
     private boolean checkPasswordIsExist = false;
 
     @FXML
@@ -39,6 +54,9 @@ public class LoginController {
         initSignUp();
     }
 
+    /**
+     * Init sign up stage.
+     */
     private void initSignUp() {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader();
@@ -51,6 +69,9 @@ public class LoginController {
 
     }
 
+    /**
+     * Creates main form.
+     */
     private void createMainForm() {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("views/Main.fxml"));
@@ -67,6 +88,10 @@ public class LoginController {
         }
     }
 
+    /**
+     * Login Button.
+     * @param actionEvent actionEvent
+     */
     public void loginButton(ActionEvent actionEvent) {
         PropertyTool pt = new PropertyTool();
         if (!pt.isPropertyExist("password")) {
@@ -80,6 +105,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Show sign up form.
+     */
     private void showSignUp() {
         if (signUpStage == null) {
             signUpStage = new Stage();
@@ -92,6 +120,9 @@ public class LoginController {
         signUpStage.showAndWait();
     }
 
+    /**
+     * Show alert window.
+     */
     private void showAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Wrong Password");
