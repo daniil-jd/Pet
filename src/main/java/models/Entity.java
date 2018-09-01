@@ -4,9 +4,18 @@ import lombok.Data;
 
 import java.util.Objects;
 
+/**
+ * Entity class. The entity includes the title and text.
+ */
 @Data
 public class Entity {
+    /**
+     * Entity name.
+     */
     private String name;
+    /**
+     * Entity text.
+     */
     private String value;
 
     /**
@@ -27,18 +36,34 @@ public class Entity {
         this.value = value;
     }
 
+    /**
+     * Gets text.
+     * @return text
+     */
     public String getValue() {
         return value;
     }
 
+    /**
+     * Sets value.
+     * @param value text
+     */
     public void setValue(String value) {
         this.value = value;
     }
 
+    /**
+     * Gets name.
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets name.
+     * @param name name
+     */
     public void setName(String name) {
         this.name = name;
     }

@@ -11,6 +11,9 @@ import tools.PropertyTool;
 
 import java.util.PropertyPermission;
 
+/**
+ * Edit controller. This controller is responsible for editing the name of the entity.
+ */
 public class EditController {
     @FXML
     private Button confirmButton;
@@ -21,28 +24,42 @@ public class EditController {
     @FXML
     private TextField nameTF;
 
+    /**
+     * Entity to edit.
+     */
     private Entity entity;
 
-    @FXML
-    private void initialize() {
-
-    }
-
+    /**
+     * Get the entity.
+     * @return entity
+     */
     public Entity getEntity() {
         return entity;
     }
 
+    /**
+     * Set the entity.
+     * @param entity entity
+     */
     public void setEntity(Entity entity) {
         this.entity = entity;
         nameTF.setText((entity.getName()));
     }
 
+    /**
+     * Determines actions when closing a form.
+     * @param actionEvent actionEvent
+     */
     public void actionClose(ActionEvent actionEvent) {
         Node source = (Node) actionEvent.getSource();
         Stage stage = (Stage) source.getScene().getWindow();
         stage.hide();
     }
 
+    /**
+     * Saves the entity.
+     * @param actionEvent actionEvent
+     */
     public void saveEntity(ActionEvent actionEvent) {
         if (nameTF.getText() != "") {
             PropertyTool pt = new PropertyTool();
@@ -52,6 +69,10 @@ public class EditController {
         actionClose(actionEvent);
     }
 
+    /**
+     * Close event.
+     * @param actionEvent
+     */
     public void close(ActionEvent actionEvent) {
         actionClose(actionEvent);
     }

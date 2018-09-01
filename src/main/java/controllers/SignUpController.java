@@ -9,6 +9,9 @@ import tools.PropertyTool;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controller for creating a new password.
+ */
 public class SignUpController {
 
     @FXML
@@ -17,6 +20,10 @@ public class SignUpController {
     @FXML
     private PasswordField passField2;
 
+    /**
+     * Creates new password.
+     * @param actionEvent actionEvent
+     */
     public void createPass(ActionEvent actionEvent) {
         if (!passField1.getText().isEmpty() && !passField2.getText().isEmpty()
                 && passField1.getText().equals(passField2.getText())) {
