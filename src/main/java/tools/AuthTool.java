@@ -1,6 +1,7 @@
 package tools;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.properties.PropertyValueEncryptionUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,13 +28,17 @@ public class AuthTool {
     }
 
     public static String getOpenText(String encodedText) {
-        if (password.length() > 0) {
-            StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-            encryptor.setPassword(password);
-            encryptor.setAlgorithm("PBEWithMD5AndDES");
-            return PropertyValueEncryptionUtils.decrypt(encodedText, encryptor);
+        try {
+            if (password.length() > 0) {
+                StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+                encryptor.setPassword(password);
+                encryptor.setAlgorithm("PBEWithMD5AndDES");
+                return PropertyValueEncryptionUtils.decrypt(encodedText, encryptor);
+            }
+        } catch (EncryptionOperationNotPossibleException e) {
+            e.printStackTrace();
         }
-        return "";
+        return encodedText;
     }
 
     public static String getEncodedText(String openText) {
