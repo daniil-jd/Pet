@@ -3,13 +3,11 @@ package tools;
 import models.Entity;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The class is designed to simplify the interaction with files .properties. *
+ * Read .properties, get prop, set prop.
  */
 public class PropertyTool {
 
@@ -77,6 +75,10 @@ public class PropertyTool {
         path = pathFile.getAbsolutePath() + "\\";
     }
 
+    /**
+     * Get path.
+     * @return path
+     */
     public String getPath() {
         return path;
     }
@@ -161,5 +163,47 @@ public class PropertyTool {
      */
     public Set<Map.Entry<Object, Object>> getAllProperties() {
         return properties.entrySet();
+    }
+
+    /**
+     * Check that .properties no contains any prop.
+     * @return true if empty
+     */
+    public boolean isEmpty() {
+        return properties.entrySet().size() == 0;
+    }
+
+    /**
+     * Set new property name.
+     * @param oldName old prop name
+     * @param currentName current prop name
+     * @return true if success
+     */
+    public boolean setPropertyName(String oldName, String currentName) {
+        try {
+            String value = properties.getProperty(oldName);
+            properties.remove(oldName);
+            properties.put(currentName, value);
+
+            Map<String, String> map = new HashMap<>();
+            map.putAll(getMapFromProp());
+            saveProperties(map);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    private Map<String, String> getMapFromProp() {
+        Map<String, String> result = new HashMap<>();
+        try {
+            Set<Map.Entry<Object, Object>> set = properties.entrySet();
+            for (Map.Entry<Object, Object> map : set) {
+                result.put(map.getKey().toString(), map.getValue().toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

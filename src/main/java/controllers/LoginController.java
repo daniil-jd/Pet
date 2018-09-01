@@ -138,7 +138,7 @@ public class LoginController {
     public void onMouseMove(MouseEvent mouseEvent) {
         if (!checkPasswordIsExist) {
             PropertyTool pt = new PropertyTool();
-            if (!pt.isFileExist() || !pt.isPropertyExist("password")) {
+            if (!pt.isFileExist() || (!pt.isPropertyExist("password") && pt.isEmpty())) {
                 showSignUp();
             }
             checkPasswordIsExist = true;
