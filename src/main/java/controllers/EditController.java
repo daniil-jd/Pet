@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Entity;
+import tools.PropertyTool;
+
+import java.util.PropertyPermission;
 
 public class EditController {
     @FXML
@@ -42,6 +45,8 @@ public class EditController {
 
     public void saveEntity(ActionEvent actionEvent) {
         if (nameTF.getText() != "") {
+            PropertyTool pt = new PropertyTool();
+            pt.setPropertyName(entity.getName(), nameTF.getText());
             entity.setName(nameTF.getText());
         }
         actionClose(actionEvent);
