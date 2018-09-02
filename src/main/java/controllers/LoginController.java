@@ -79,6 +79,7 @@ public class LoginController {
             Stage stage = new Stage();
             stage.initModality(Modality.NONE);
             stage.setResizable(false);
+            stage.setTitle("Password Storage");
             stage.setScene(new Scene(root1));
             passwordField.getScene().getWindow().hide();
             stage.show();
@@ -111,7 +112,7 @@ public class LoginController {
     private void showSignUp() {
         if (signUpStage == null) {
             signUpStage = new Stage();
-            signUpStage.setTitle("Sign Up");
+            signUpStage.setTitle("Enter new password");
             signUpStage.setResizable(false);
             signUpStage.setScene(new Scene(fxmlParent));
             signUpStage.initModality(Modality.WINDOW_MODAL);

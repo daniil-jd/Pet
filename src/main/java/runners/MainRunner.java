@@ -18,6 +18,7 @@ public class MainRunner extends Application {
 
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Enter your password");
         primaryStage.setResizable(false);
         primaryStage.show();
     }
