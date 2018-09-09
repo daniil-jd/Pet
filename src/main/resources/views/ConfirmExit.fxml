@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="174.0" prefWidth="382.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ExitConformationController">
+   <children>
+      <Button fx:id="confirmButton" layoutX="113.0" layoutY="116.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" />
+      <Button defaultButton="true" layoutX="215.0" layoutY="116.0" mnemonicParsing="false" onAction="#cancel" text="Return" />
+      <Label layoutX="77.0" layoutY="70.0" text="Are you sure about exit this Awesome app?" />
+   </children>
+</AnchorPane>
