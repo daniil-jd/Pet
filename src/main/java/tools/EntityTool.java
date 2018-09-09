@@ -20,12 +20,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class EntityTool {
-
-    public static boolean saveEntity(final Entity entity) {
-        System.out.println("save " + entity + " " + entity.getValue());
-        return true;
-    }
-
     private DocumentBuilderFactory factory;
     private DocumentBuilder builder;
     private Document document;

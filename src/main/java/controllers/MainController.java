@@ -1,5 +1,6 @@
 package controllers;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,12 +26,11 @@ import models.Entity;
 import tools.AuthTool;
 import tools.EntityTool;
 import tools.PropertyTool;
+import tools.SaverTool;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Main controller. Responsible for creating, editing, deleting entities.
@@ -43,26 +43,30 @@ public class MainController {
     @FXML
     private TextArea myTextArea;
 
-    @FXML
-    private Button addButton;
-
-    @FXML
-    private TextField myTextField;
-
     /**
      * FXML loader.
      */
     private FXMLLoader fxmlLoader;
 
     /**
-     * Parent.
+     * Parent edit.
      */
     private Parent fxmlEdit;
 
     /**
-     * Edit Controller
+     * Parent exit.
+     */
+    private Parent fxmlQuit;
+
+    /**
+     * Edit Controller.
      */
     private EditController editController;
+
+    /**
+     * Exit conformation controller.
+     */
+    private ExitConformationController exitConformationController;
 
     @FXML
     private AnchorPane anchorPane;
@@ -78,6 +82,10 @@ public class MainController {
      */
     private Stage renameListViewStage;
 
+    /**
+     * Exit stage.
+     */
+    private Stage exitStage;
 
     @FXML
     private void initialize() {
@@ -85,6 +93,7 @@ public class MainController {
         initStartData();
         initListeners();
         initEditStage();
+        initExitConformationStage();
     }
 
     /**
@@ -99,7 +108,10 @@ public class MainController {
      */
     private void initStartData() {
         Entity info = new Entity("info",
-                "Здесь будет информация о приложении...");
+                "Для добавления новой записи нажмите 'Add'.\n" +
+                        "Чтобы переименновать существующую запись дважды кликните по \nней или используйте контекстным меню 'Edit'.\n" +
+                        "Для загрузки/сохранения/удаления записи используйте контекстным \nменю 'Edit'.\n" +
+                        "Для выбора режима выхода из этого восхитительного приложения \nиспользуйте контекстным меню 'Quit'.\n");
         obList.add(info);
         obList.add(new Entity("Новая запись..."));
         myListView.setItems(obList);
@@ -157,9 +169,7 @@ public class MainController {
                             ((Stage) newWindow).setOnCloseRequest(new EventHandler<WindowEvent>() {
                                 @Override
                                 public void handle(WindowEvent event) {
-                                    for (Entity entity : myListView.getItems()) {
-//                                        EntityTool.saveEntity(entity);
-                                    }
+                                    SaverTool.saveAllEntities(myListView.getItems());
                                 }
                             });
                         }
@@ -182,6 +192,21 @@ public class MainController {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Init exit conformation stage.
+     */
+    private void initExitConformationStage() {
+        try {
+            fxmlLoader  = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getResource("/views/ConfirmExit.fxml"));
+            fxmlQuit = fxmlLoader.load();
+            exitConformationController = fxmlLoader.getController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Add value in ListView.
      * @param actionEvent actionEvent
@@ -198,7 +223,7 @@ public class MainController {
     public void onClick(MouseEvent mouseEvent) {
         if (mouseEvent.getClickCount() == 2) {
             Entity currentEntity = myListView.getFocusModel().getFocusedItem();
-            if (currentEntity != null) {
+            if (currentEntity != null && !currentEntity.getName().equals("info")) {
                 showEditDialog(currentEntity);
             }
         }
@@ -242,19 +267,7 @@ public class MainController {
      */
     public void saveFromMenuBar(ActionEvent actionEvent) {
         Entity currentEntity = myListView.getFocusModel().getFocusedItem();
-        PropertyTool pt = new PropertyTool();
-
-        if (currentEntity != null) {
-            Entity encodedEntity = new Entity(currentEntity.getName(),
-                    AuthTool.getEncodedText(currentEntity.getValue()));
-            EntityTool saveTool = new EntityTool(false);
-            saveTool.saveEntityXML(encodedEntity, new PropertyTool().getPath());
-
-            Map<String, String> map = new HashMap<>();
-            map.put(currentEntity.getName(),
-                    pt.getPath() + currentEntity.getName() + ".xml");
-            pt.saveProperties(map);
-        }
+        SaverTool.saveEntity(currentEntity);
     }
 
     /**
@@ -288,5 +301,52 @@ public class MainController {
             myListView.setItems(entities);
             myListView.refresh();
         }
+    }
+
+    /**
+     * Init exit stage.
+     */
+    private void initExitStage() {
+        if (exitStage == null) {
+            exitStage = new Stage();
+            exitStage.setTitle("Confirm quit");
+            exitStage.setResizable(false);
+            exitStage.setScene(new Scene(fxmlQuit));
+            exitStage.initModality(Modality.WINDOW_MODAL);
+            exitStage.initOwner(myListView.getScene().getWindow());
+        }
+    }
+
+    /**
+     * Quit application without save any change.
+     * @param actionEvent actionEvent
+     */
+    public void quitWithoutSave(ActionEvent actionEvent) {
+        initExitStage();
+        exitStage.showAndWait();
+        Platform.exit();
+    }
+
+    /**
+     * Quit application with save current file.
+     * @param actionEvent actionEvent
+     */
+    public void quitAndSaveCurrent(ActionEvent actionEvent) {
+        initExitStage();
+        Entity currentEntity = myListView.getFocusModel().getFocusedItem();
+        exitConformationController.setEntity(currentEntity);
+        exitStage.showAndWait();
+        Platform.exit();
+    }
+
+    /**
+     * Quit application with save all files.
+     * @param actionEvent
+     */
+    public void quitAndSaveAll(ActionEvent actionEvent) {
+        initExitStage();
+        exitConformationController.setEntities(myListView.getItems());
+        exitStage.showAndWait();
+        Platform.exit();
     }
 }
